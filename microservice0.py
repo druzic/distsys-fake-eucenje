@@ -1,4 +1,3 @@
-import aiohttp
 import asyncio
 import aiosqlite
 import aiofiles
@@ -18,25 +17,14 @@ async def insertData():
                 await db.execute("INSERT INTO tablica (username,ghlink,filename,content) VALUES (?,?,?,?)",(json.loads(x)["repo_name"].split("/")[0],
                     "https://github.com/" + json.loads(x)["repo_name"], json.loads(x)["path"].split("/")[-1], json.loads(x)["content"],),)
                 await db.commit()
-
                 i+=1
                 print(i)
-            if i == 150:
+            if i == 10000:
                 print("Baza popunjena")
                 return
 
-
-
-@routes.get("/M0")
-async def M0(request):
-    try:
-        response = {
-            "service_id":0,
-            "data":[]
-
-
-        }
-        async with aiosqlite.connect("baza.db") as db:
+async def checkData():
+    async with aiosqlite.connect("baza.db") as db:
             async with db.execute("SELECT COUNT(*) FROM tablica") as cur:
                 var = await cur.fetchall()
                 print(var)
@@ -51,9 +39,19 @@ async def M0(request):
                     await db.commit()
                     print("Baza izbrisana. Popunjavam bazu...")
                     await insertData()
+                    return
+
+
+@routes.get("/M0")
+async def M0(request):
+    try:
+        response = {
+            "service_id":0,
+            "data":[]
+        }
 
         async with aiosqlite.connect("baza.db") as db:
-            async with db.execute("SELECT * FROM tablica LIMIT 100") as cur:
+            async with db.execute("SELECT * FROM tablica ORDER BY RANDOM() LIMIT 100") as cur:
                 async for row in cur:
                     response["data"].append({'username': row[1], 'githubLink': row[2], 'filename': row[3], 'content': row[4]})
                 await db.commit()
@@ -63,7 +61,7 @@ async def M0(request):
     except Exception as e:
         return web.json_response({"status": "failed", "message": str(e)}, status=500)
 
-
+asyncio.run(checkData())
 app = web.Application()
 app.router.add_routes(routes)
 web.run_app(app)
