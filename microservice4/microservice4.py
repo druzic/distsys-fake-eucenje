@@ -1,11 +1,13 @@
 import aiofiles
-from aiohttp  import web
+import os
+from aiohttp import web
 
 routes = web.RouteTableDef()
 allData = []
 
 async def create_files():
     print(len(allData), "a")
+    print(os.getcwd())
     for x in allData:
         print(x["filename"])
         async with aiofiles.open(f'folder/{x["filename"]}', "w") as t:

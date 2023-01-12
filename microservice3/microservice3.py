@@ -15,7 +15,9 @@ async def WT2(request):
             filtered_data = [
             row for row in data["data"] if row["username"].startswith("d")]
             print(len(filtered_data))
-            x = await session.post("http://127.0.0.1:8084/gatherData", json=filtered_data)
+
+            x = await session.post("http://microservice4:8084/gatherData", json=filtered_data)
+            #x = await session.post("http://127.0.0.1:8084/gatherData", json=filtered_data)
             print(x)
         return web.json_response({"status": "ok",}, status=200,)
 

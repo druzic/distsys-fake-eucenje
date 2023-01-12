@@ -1,0 +1,26 @@
+services:
+  microservice0:
+    build: microservice0
+    command: ["python", "./microservice0.py"]
+    ports:
+      - "8080:8080"
+  microservice1:
+    build: microservice1
+    command: ["python", "./microservice1.py"]
+    ports:
+      - "8081:8081"
+  microservice2:
+    build: microservice2
+    command: ["python", "./microservice2.py"]
+    ports:
+      - "8082:8082"
+  microservice3:
+    build: microservice3
+    command: ["python", "./microservice3.py"]
+    ports:
+      - "8083:8083"
+  microservice4:
+    build: microservice4
+    command: ["python", "./microservice4.py"]
+    ports:
+      - "8084:8084"

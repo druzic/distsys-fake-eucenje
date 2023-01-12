@@ -19,7 +19,7 @@ async def insertData():
                 await db.commit()
                 i+=1
                 print(i)
-            if i == 10000:
+            if i == 1000:
                 print("Baza popunjena")
                 return
 
@@ -64,4 +64,4 @@ async def M0(request):
 asyncio.run(checkData())
 app = web.Application()
 app.router.add_routes(routes)
-web.run_app(app)
+web.run_app(app, port=8080)
